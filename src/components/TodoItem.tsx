@@ -24,6 +24,11 @@ function TodoItem(props: any) {
         setEditLabel(false);
     }
 
+    const handletoggleEdit = () => {
+        setvalueTodo(props.todo.name);
+        setEditLabel(!editLabel)
+    }
+
     return (
         <Stack>
             <Stack horizontal verticalAlign="center" horizontalAlign="space-between" onMouseEnter={() => setHoverIcon(!hoverIcon)} onMouseLeave={() => setHoverIcon(!hoverIcon)}>
@@ -50,7 +55,7 @@ function TodoItem(props: any) {
                     <IconButton
                         iconProps={{ iconName: 'edit' }}
                         className="editButton"
-                        onClick={() => {setEditLabel(!editLabel)}}
+                        onClick={() => {handletoggleEdit()}}
                     />
                     <IconButton
                         iconProps={{ iconName: 'trash' }}
