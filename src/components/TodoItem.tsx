@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { Stack, Label, IconButton, Dialog, DialogType, DialogFooter, PrimaryButton, DefaultButton } from '@fluentui/react';
+import { Stack, Label, IconButton, Dialog, DialogType, DialogFooter, PrimaryButton, DefaultButton, TextField } from '@fluentui/react';
 
 function TodoItem(props: any) {
     const [openDeleteModal, setOpenModal] = useState(true);
+    const [editLabel, setEditLabel] = useState(false); 
 
     const deleteTodo = (id: number ) => {
         props.deleteTodo(id);
@@ -11,13 +12,21 @@ function TodoItem(props: any) {
 
     return (
         <Stack>
-            <Stack horizontal verticalAlign="center" horizontalAlign="space-between">
-                <Label>{props.todo.name}</Label>
-                <IconButton
-                    iconProps={{ iconName: 'trash' }}
-                    className="clearButton"
-                    onClick={() => {setOpenModal(!openDeleteModal)}}
-                />
+            <Stack horizontal verticalAlign="center" horizontalAlign="space-between" onMouseEnter={() => setEditLabel(!editLabel)} onMouseLeave={() => setEditLabel(!editLabel)}>
+            <Label >{props.todo.name}</Label> 
+            {editLabel ?
+                <Stack horizontal>
+                    <IconButton iconProps={{ iconName: 'edit' }}/>
+                    <IconButton
+                        iconProps={{ iconName: 'trash' }}
+                        className="clearButton"
+                        onClick={() => {setOpenModal(!openDeleteModal)}}
+                    />
+                </Stack>
+                 :
+                null
+            }
+                
             </Stack>
             <Dialog 
                 hidden={openDeleteModal}
