@@ -1,23 +1,70 @@
 import React, { useState } from "react";
-import { Stack, Label, IconButton, Dialog, DialogType, DialogFooter, PrimaryButton, DefaultButton } from '@fluentui/react';
+import { Stack, Label, IconButton, Dialog, DialogType, DialogFooter, PrimaryButton, DefaultButton, TextField } from '@fluentui/react';
 
 function TodoItem(props: any) {
     const [openDeleteModal, setOpenModal] = useState(true);
+    const [hoverIcon, setHoverIcon] = useState(false);
+    const [editLabel, setEditLabel] = useState(false);
+    const [valueTodo, setvalueTodo] = useState('');
 
     const deleteTodo = (id: number ) => {
         props.deleteTodo(id);
         setOpenModal(true);
     }
 
+    const handleChange = (e: any) => {
+        console.log(e.currentTarget.value);
+        setvalueTodo(e.currentTarget.value);
+        // setEditLabel(!editLabel);
+    } 
+
+    const editTodo = (id: number, todoName: string) => {
+        console.log(todoName);
+        props.editTodo(id, todoName);
+        setEditLabel(false);
+    }
+
+    const handletoggleEdit = () => {
+        setvalueTodo(props.todo.name);
+        setEditLabel(!editLabel)
+    }
+
     return (
         <Stack>
-            <Stack horizontal verticalAlign="center" horizontalAlign="space-between">
-                <Label>{props.todo.name}</Label>
-                <IconButton
-                    iconProps={{ iconName: 'trash' }}
-                    className="clearButton"
-                    onClick={() => {setOpenModal(!openDeleteModal)}}
-                />
+            <Stack horizontal verticalAlign="center" horizontalAlign="space-between" onMouseEnter={() => setHoverIcon(!hoverIcon)} onMouseLeave={() => setHoverIcon(!hoverIcon)}>
+            {!editLabel ? <Label >{props.todo.name}</Label> : 
+            <TextField defaultValue={props.todo.name} onChange={handleChange}/>}
+            {! hoverIcon
+                ? null
+                : editLabel
+                ?
+                <Stack horizontal>
+                    <IconButton
+                        iconProps={{ iconName: 'checkmark' }}
+                        className="checkButton"
+                        onClick={ () => {editTodo(props.todo.id, valueTodo)} }
+                    />
+                    <IconButton
+                        iconProps={{ iconName: 'cancel' }}
+                        className="cancelButton"
+                        onClick={() => {setEditLabel(!editLabel)}}
+                    />
+                </Stack>
+                :
+                <Stack horizontal>
+                    <IconButton
+                        iconProps={{ iconName: 'edit' }}
+                        className="editButton"
+                        onClick={() => {handletoggleEdit()}}
+                    />
+                    <IconButton
+                        iconProps={{ iconName: 'trash' }}
+                        className="clearButton"
+                        onClick={() => {setOpenModal(!openDeleteModal)}}
+                    />
+                </Stack>
+            }
+                
             </Stack>
             <Dialog 
                 hidden={openDeleteModal}

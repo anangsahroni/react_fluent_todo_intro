@@ -23,13 +23,20 @@ export const App: React.FunctionComponent = () => {
     setTodos(newTasks);
   }
 
+  const editTodo = (id: number, todoName: string) => {
+    const editedTasks = getTodos.map(todo => {
+      return todo.id === id ? {...todo, name: todoName} : {...todo}
+    });
+    setTodos(editedTasks);
+  }
+
   return (
     <div className='wrapper'>
       <Stack horizontalAlign='center'>
         <h1>Todo App Using Fluent UI & React</h1>
         <Stack style={{ width: 300 }} gap={25}>
           <AddTodo addTodo={addTodo}/>
-          <TodoList todos={getTodos} deleteTodo={deleteTodo}/>
+          <TodoList todos={getTodos} deleteTodo={deleteTodo} editTodo={editTodo}/>
         </Stack>
       </Stack>
     </div>
